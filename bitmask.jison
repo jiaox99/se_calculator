@@ -44,27 +44,27 @@ EnumList
         {
             $$ = [$1];
         }
-    |  EnumList EnumItem
+    |  EnumList O_Comma EnumItem
         {
-            $1.push($2);
+            $1.push($3);
             $$ = $1;
         }
     ;
 
 EnumItem
-    :  V_NAME O_Comma
+    :  V_NAME
         {
             $$ = [$1, -1];
         }
-    |  V_NAME O_Equal V_NAME O_Comma
+    |  V_NAME O_Equal V_NAME
         {
             $$ = [$1, $3];
         }
-    |  V_NAME O_Equal C_Number O_Comma
+    |  V_NAME O_Equal C_Number
         {
             $$ = [$1, parseInt($3)];
         }
-    |  V_NAME O_Equal C_Number O_LeftShift C_Number O_Comma
+    |  V_NAME O_Equal C_Number O_LeftShift C_Number
         {
             $$ = [$1, parseInt($3) << parseInt($5)];
         }

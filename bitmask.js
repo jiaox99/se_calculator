@@ -72,12 +72,12 @@
   }
 */
 var bitmask = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,7],$V1=[5,8];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,7],$V1=[8,10];
 var parser = {trace: function trace () { },
 yy: {},
 symbols_: {"error":2,"BitmaskDefinition":3,"K_Enum":4,"V_NAME":5,"O_OpenBrace":6,"EnumList":7,"O_CloseBrace":8,"EnumItem":9,"O_Comma":10,"O_Equal":11,"C_Number":12,"O_LeftShift":13,"$accept":0,"$end":1},
 terminals_: {2:"error",4:"K_Enum",5:"V_NAME",6:"O_OpenBrace",8:"O_CloseBrace",10:"O_Comma",11:"O_Equal",12:"C_Number",13:"O_LeftShift"},
-productions_: [0,[3,5],[7,1],[7,2],[9,2],[9,4],[9,4],[9,6]],
+productions_: [0,[3,5],[7,1],[7,3],[9,1],[9,3],[9,3],[9,5]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -106,33 +106,33 @@ case 2:
 break;
 case 3:
 
-            $$[$0-1].push($$[$0]);
-            this.$ = $$[$0-1];
+            $$[$0-2].push($$[$0]);
+            this.$ = $$[$0-2];
         
 break;
 case 4:
 
-            this.$ = [$$[$0-1], -1];
+            this.$ = [$$[$0], -1];
         
 break;
 case 5:
 
-            this.$ = [$$[$0-3], $$[$0-1]];
+            this.$ = [$$[$0-2], $$[$0]];
         
 break;
 case 6:
 
-            this.$ = [$$[$0-3], parseInt($$[$0-1])];
+            this.$ = [$$[$0-2], parseInt($$[$0])];
         
 break;
 case 7:
 
-            this.$ = [$$[$0-5], parseInt($$[$0-3]) << parseInt($$[$0-1])];
+            this.$ = [$$[$0-4], parseInt($$[$0-2]) << parseInt($$[$0])];
         
 break;
 }
 },
-table: [{3:1,4:[1,2]},{1:[3]},{5:[1,3]},{6:[1,4]},{5:$V0,7:5,9:6},{5:$V0,8:[1,8],9:9},o($V1,[2,2]),{10:[1,10],11:[1,11]},{1:[2,1]},o($V1,[2,3]),o($V1,[2,4]),{5:[1,12],12:[1,13]},{10:[1,14]},{10:[1,15],13:[1,16]},o($V1,[2,5]),o($V1,[2,6]),{12:[1,17]},{10:[1,18]},o($V1,[2,7])],
+table: [{3:1,4:[1,2]},{1:[3]},{5:[1,3]},{6:[1,4]},{5:$V0,7:5,9:6},{8:[1,8],10:[1,9]},o($V1,[2,2]),o($V1,[2,4],{11:[1,10]}),{1:[2,1]},{5:$V0,9:11},{5:[1,12],12:[1,13]},o($V1,[2,3]),o($V1,[2,5]),o($V1,[2,6],{13:[1,14]}),{12:[1,15]},o($V1,[2,7])],
 defaultActions: {8:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
@@ -632,7 +632,7 @@ case 10:return "EOF";
 break;
 }
 },
-rules: [/^(?:\s+)/,/^(?:(\/\*([^\*]|(\*)*[^\*\/])*(\*)*\*\/))/,/^(?:enum\b)/,/^(?:[+-]?[0-9]+\b)/,/^(?:[a-zA-Z0-9_]+)/,/^(?:=)/,/^(?:,)/,/^(?:\{)/,/^(?:\})/,/^(?:<<)/,/^(?:$)/],
+rules: [/^(?:\s+)/,/^(?:(\/\*([^\*]|(\*)*[^\*/])*(\*)*\*\/))/,/^(?:enum\b)/,/^(?:[+-]?[0-9]+\b)/,/^(?:[a-zA-Z0-9_]+)/,/^(?:=)/,/^(?:,)/,/^(?:\{)/,/^(?:\})/,/^(?:<<)/,/^(?:$)/],
 conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10],"inclusive":true}}
 });
 return lexer;

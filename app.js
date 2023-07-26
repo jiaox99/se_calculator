@@ -40,20 +40,53 @@ function initButtons()
 
 function createNewExpressionDialog()
 {
-    var ele = $("<div title='Expression'><b>Expression:</b></div>");
-    var input = $("<input />").css("width", "100%");
+    var ele = $("<div title='Expression'><b>Enter the expression:</b></div>");
+    var input = $(`<input placeholder="e.g. 2+3*4"/>`).css("width", "100%");
+    var note = $(`<input placeholder="Any note"/>`).css("width", "100%");
     var output = $("<p>The Result:</p>");
     input.on("keyup", function(e){
         if (e.which == 13)
         {
             var result = eval(input.val());
-            output.html(`<p>The Result: ${result}</p>`);
+            output.html(`<p>The Result: <br>DEC: ${result} <br>HEX: ${result.toString(16)} <br>BIN: ${result.toString(2)}</p>`);
         }
     });
-    ele.append([input, output]);
+    ele.append([input, note, output]);
     $("body").append(ele);
     ele.dialog()
     allDialogs.push(ele);
+}
+
+function refreshBitmaskDropdown( dropdown )
+{
+    var selectedIndex = dropdown.get(0).selectedIndex;
+    var option = "";
+    if (selectedIndex >= 0)
+    {
+        option = dropdown.get(0).options[selectedIndex].text;
+    }
+    dropdown.empty();
+    var i = -1;
+    for (var key in bitmaskDefs)
+    {
+        var opt = $("<option />").val(key).text(key);
+        dropdown.append(opt);
+        i++;
+        if (key === option)
+        {
+            selectedIndex = i;
+        }
+    }
+
+    dropdown.get(0).selectedIndex = selectedIndex;
+}
+
+function refreshAllBitmaskDropdowns()
+{
+    for (var i = 0; i < bitmaskDropDowns.length; i++)
+    {
+        refreshBitmaskDropdown(bitmaskDropDowns[i]);
+    }
 }
 
 function createNewBitmaskDefinitionDialog()
@@ -64,6 +97,11 @@ function createNewBitmaskDefinitionDialog()
     button.button().on("click", function(e){
         var content = input.val();
         var def = parseBitmask(content);
+        if (bitmaskDefs[def.name] !== undefined)
+        {
+            alert("Bitmask with the same name already exists!");
+            return;
+        }
         bitmaskDefs[def.name] = def;
     });
     ele.append(input, button);
@@ -72,19 +110,39 @@ function createNewBitmaskDefinitionDialog()
     allDialogs.push(ele);
 }
 
+function refreshBitmaskResult(value, defName, output)
+{
+    var def = bitmaskDefs[defName];
+    var result = [];
+    for (var i = 0; i < def.keys.length; i++)
+    {
+        if (value & def.values[i])
+        {
+            result.push(def.keys[i]);
+        }
+    }
+    output.html(`<p>The result:<br>${result.join(",")}</p>`)
+}
+
 function createNewBitmaskValueDialog()
 {
     var ele = $(`<div title="Bitmask Value"></div>`);
-    var input = $(`<input />`);
+    var input = $(`<input />`).css("width", "60px");
     var dropdown = $(`<select />`);
+    var output = $(`<p />`);
+    dropdown.on("change", function(e){
+        refreshBitmaskResult(parseInt(input.val()), dropdown.val(), output);
+    });
+    refreshBitmaskDropdown(dropdown);
     input.on("keyup", function(e){
         if (e.which == 13)
         {
-            
+            refreshBitmaskResult(parseInt(input.val()), dropdown.val(), output);
         }
     });
 
-    ele.append(input, dropdown);
+    bitmaskDropDowns.push(dropdown);
+    ele.append(input, dropdown, output);
 
     $("body").append(ele);
     ele.dialog();
