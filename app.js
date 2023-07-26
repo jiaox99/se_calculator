@@ -5,6 +5,7 @@ $(function(){
 var allDialogs = [];
 var bitmaskDefs = {};
 var bitmaskDropDowns = [];
+var bitmaskParser = new bitmask.Parser();
 
 function BitmaskDefinition(name="", keys=[], values=[])
 {
@@ -15,44 +16,11 @@ function BitmaskDefinition(name="", keys=[], values=[])
 
 function parseBitmask(content)
 {
-    var def = BitmaskDefinition();
-    var tokens = content.split(/\s*|,/);
-    var state = 0; //Init state
-    for (token of tokens)
-    {
-        console.log(token);
-        switch (state)
-        {
-            case 0:
-                if (token !== "enum")
-                {
-                    alert("Can't find keyword 'enum'");
-                }
-                else
-                {
-                    state = 1;
-                }
-                break;
-            case 1: //Parsing name
-                def.name = token;
-                state = 2;
-                break;
-            case 2: //Waiting for '{'
-                if (token!== "{")
-                {
-                    alert("Can't find '{'");
-                }
-                else
-                {
-                    state = 3;
-                }
-                break;
-            case 3:
-                
-        }
-    }
+    var result = bitmaskParser.parse(content);
 
-    return def;
+    console.log(result);
+
+    return new BitmaskDefinition(result.name, result.keys, result.values);
 }
 
 function initButtons()
@@ -95,7 +63,8 @@ function createNewBitmaskDefinitionDialog()
     var button = $(`<button>Confirm</button>`);
     button.button().on("click", function(e){
         var content = input.val();
-        
+        var def = parseBitmask(content);
+        bitmaskDefs[def.name] = def;
     });
     ele.append(input, button);
     $("body").append(ele);

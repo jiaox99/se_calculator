@@ -13,6 +13,7 @@ COMMENTS \/\*([^\*]|(\*)*[^\*/])*(\*)*\*\/
 ","                     return "O_Comma";
 "{"                     return "O_OpenBrace";
 "}"                     return "O_CloseBrace";
+"<<"                    return "O_LeftShift";
 <<EOF>>                 return "EOF";
 /lex
 
@@ -24,7 +25,7 @@ BitmaskDefinition
         {
             var keys = [];
             var values = [];
-            for (var enumItem of $3) {
+            for (var enumItem of $4) {
                 keys.push(enumItem[0]);
                 values.push(enumItem[1]);
             }
@@ -43,15 +44,28 @@ EnumList
         {
             $$ = [$1];
         }
-    |  EnumList O_Comma EnumItem
+    |  EnumList EnumItem
         {
-            $1.push($3);
+            $1.push($2);
             $$ = $1;
         }
     ;
 
 EnumItem
-    :  V_NAME O_Equal C_Number
+    :  V_NAME O_Comma
+        {
+            $$ = [$1, -1];
+        }
+    |  V_NAME O_Equal V_NAME O_Comma
+        {
+            $$ = [$1, $3];
+        }
+    |  V_NAME O_Equal C_Number O_Comma
+        {
+            $$ = [$1, parseInt($3)];
+        }
+    |  V_NAME O_Equal C_Number O_LeftShift C_Number O_Comma
+        {
+            $$ = [$1, parseInt($3) << parseInt($5)];
+        }
     ;
-
-%%
