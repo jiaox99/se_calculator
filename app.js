@@ -6,21 +6,32 @@ var allDialogs = [];
 var bitmaskDefs = {};
 var bitmaskDropDowns = [];
 var bitmaskParser = new bitmask.Parser();
+bitmaskDefId = 0;
 
-function BitmaskDefinition(name="", keys=[], values=[])
-{
-    this.name = name;
-    this.keys = keys;
-    this.values = values;
+class BitmaskDefinition {
+    constructor(id, name = "", keys = [], values = []) {
+        this.id = id;
+        this.name = name;
+        this.keys = keys;
+        this.values = values;
+    }
 }
 
-function parseBitmask(content)
+function parseBitmask(content, id)
 {
-    var result = bitmaskParser.parse(content);
+    try
+    {
+        var result = bitmaskParser.parse(content);
 
-    console.log(result);
-
-    return new BitmaskDefinition(result.name, result.keys, result.values);
+        // console.log(result);
+    
+        return new BitmaskDefinition(id, result.name, result.keys, result.values);
+    }
+    catch(e)
+    {
+        alert(e);
+        return null;
+    }
 }
 
 function initButtons()
@@ -94,15 +105,19 @@ function createNewBitmaskDefinitionDialog()
     var ele = $(`<div title="Bitmask Definition"></div>`);
     var input = $(`<textarea rows="8" cols="28"/>`);
     var button = $(`<button>Confirm</button>`);
+    bitmaskDefId++;
     button.button().on("click", function(e){
         var content = input.val();
-        var def = parseBitmask(content);
-        if (bitmaskDefs[def.name] !== undefined)
+        var def = parseBitmask(content, bitmaskDefId);
+        if (def !== null)
         {
-            alert("Bitmask with the same name already exists!");
-            return;
+            if (bitmaskDefs[def.name] !== undefined && bitmaskDefs[def.name].id !== bitmaskDefId)
+            {
+                alert("Bitmask with the same name already exists!");
+                return;
+            }
+            bitmaskDefs[def.name] = def;
         }
-        bitmaskDefs[def.name] = def;
     });
     ele.append(input, button);
     $("body").append(ele);
