@@ -177,7 +177,7 @@ function createNewPathNormalizerDialog()
     input.on("keyup", function(e){
         if (e.which == 13)
         {
-            var result = eval(input.val());
+            var result = input.val();
             output.html(`<p>The Result: <br>Win: ${result.replace(/(\/+|\\\\)/g, "\\\\")} <br>Linux: ${result.replace(/(\/+|\\\\)/g, "/")}</p>`);
         }
     });
