@@ -178,7 +178,7 @@ function createNewPathNormalizerDialog()
         if (e.which == 13)
         {
             var result = input.val();
-            output.html(`<p>The Result: <br>Win: ${result.replace(/(\/+|\\+)/g, "\\")} <br>Linux: ${result.replace(/(\/+|\\+)/g, "/")}</p>`);
+            output.html(`<p>The Result: <br>Win: ${result.replace(/(\/+|\\+)/g, "\\")} <br>Win2: ${result.replace(/(\/+|\\+)/g, "\\\\")} <br>Linux: ${result.replace(/(\/+|\\+)/g, "/")}</p>`);
         }
     });
     ele.append([input, note, output]);
