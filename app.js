@@ -47,6 +47,10 @@ function initButtons()
     $("#addNewBitmaskValueBtn").button().on("click", function(event){
         createNewBitmaskValueDialog();
     });
+	
+	$("#addNewPathNormalizerBtn").button().on("click", function(event){
+		createNewPathNormalizerDialog();
+	});
 }
 
 function createNewExpressionDialog()
@@ -161,5 +165,24 @@ function createNewBitmaskValueDialog()
 
     $("body").append(ele);
     ele.dialog();
+    allDialogs.push(ele);
+}
+
+function createNewPathNormalizerDialog()
+{
+	var ele = $("<div title='Normalizer'><b>Enter the path:</b></div>");
+    var input = $(`<input placeholder="C:\\tempfiles/abc/def\\html"/>`).css("width", "100%");
+    var note = $(`<input placeholder="Any note"/>`).css("width", "100%");
+    var output = $("<p>The Result:</p>");
+    input.on("keyup", function(e){
+        if (e.which == 13)
+        {
+            var result = eval(input.val());
+            output.html(`<p>The Result: <br>Win: ${result.replace(/(\/+|\\\\)/g, "\\\\")} <br>Linux: ${result.replace(/(\/+|\\\\)/g, "/")}</p>`);
+        }
+    });
+    ele.append([input, note, output]);
+    $("body").append(ele);
+    ele.dialog()
     allDialogs.push(ele);
 }
