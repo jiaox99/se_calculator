@@ -2,10 +2,10 @@ $(function(){
     initButtons();
 });
 
-var allDialogs = [];
-var bitmaskDefs = {};
-var bitmaskDropDowns = [];
-var bitmaskParser = new bitmask.Parser();
+let allDialogs = [];
+let bitmaskDefs = {};
+let bitmaskDropDowns = [];
+let bitmaskParser = new bitmask.Parser();
 bitmaskDefId = 0;
 
 class BitmaskDefinition {
@@ -21,7 +21,7 @@ function parseBitmask(content, id)
 {
     try
     {
-        var result = bitmaskParser.parse(content);
+        let result = bitmaskParser.parse(content);
 
         // console.log(result);
     
@@ -55,14 +55,14 @@ function initButtons()
 
 function createNewExpressionDialog()
 {
-    var ele = $("<div title='Expression'><b>Enter the expression:</b></div>");
-    var input = $(`<input placeholder="e.g. 2+3*4"/>`).css("width", "100%");
-    var note = $(`<input placeholder="Any note"/>`).css("width", "100%");
-    var output = $("<p>The Result:</p>");
+    let ele = $("<div title='Expression'><b>Enter the expression:</b></div>");
+    let input = $(`<input placeholder="e.g. 2+3*4"/>`).css("width", "100%");
+    let note = $(`<input placeholder="Any note"/>`).css("width", "100%");
+    let output = $("<p>The Result:</p>");
     input.on("keyup", function(e){
         if (e.which == 13)
         {
-            var result = eval(input.val());
+            let result = eval(input.val());
             output.html(`<p>The Result: <br>DEC: ${result} <br>HEX: ${result.toString(16)} <br>BIN: ${result.toString(2)}</p>`);
         }
     });
@@ -74,17 +74,17 @@ function createNewExpressionDialog()
 
 function refreshBitmaskDropdown( dropdown )
 {
-    var selectedIndex = dropdown.get(0).selectedIndex;
-    var option = "";
+    let selectedIndex = dropdown.get(0).selectedIndex;
+    let option = "";
     if (selectedIndex >= 0)
     {
         option = dropdown.get(0).options[selectedIndex].text;
     }
     dropdown.empty();
-    var i = -1;
-    for (var key in bitmaskDefs)
+    let i = -1;
+    for (let key in bitmaskDefs)
     {
-        var opt = $("<option />").val(key).text(key);
+        let opt = $("<option />").val(key).text(key);
         dropdown.append(opt);
         i++;
         if (key === option)
@@ -98,7 +98,7 @@ function refreshBitmaskDropdown( dropdown )
 
 function refreshAllBitmaskDropdowns()
 {
-    for (var i = 0; i < bitmaskDropDowns.length; i++)
+    for (let i = 0; i < bitmaskDropDowns.length; i++)
     {
         refreshBitmaskDropdown(bitmaskDropDowns[i]);
     }
@@ -106,13 +106,13 @@ function refreshAllBitmaskDropdowns()
 
 function createNewBitmaskDefinitionDialog()
 {
-    var ele = $(`<div title="Bitmask Definition"></div>`);
-    var input = $(`<textarea rows="8" cols="28"/>`);
-    var button = $(`<button>Confirm</button>`);
+    let ele = $(`<div title="Bitmask Definition"></div>`);
+    let input = $(`<textarea rows="8" cols="28"/>`);
+    let button = $(`<button>Confirm</button>`);
     bitmaskDefId++;
     button.button().on("click", function(e){
-        var content = input.val();
-        var def = parseBitmask(content, bitmaskDefId);
+        let content = input.val();
+        let def = parseBitmask(content, bitmaskDefId);
         if (def !== null)
         {
             if (bitmaskDefs[def.name] !== undefined && bitmaskDefs[def.name].id !== bitmaskDefId)
@@ -131,9 +131,9 @@ function createNewBitmaskDefinitionDialog()
 
 function refreshBitmaskResult(value, defName, output)
 {
-    var def = bitmaskDefs[defName];
-    var result = [];
-    for (var i = 0; i < def.keys.length; i++)
+    let def = bitmaskDefs[defName];
+    let result = [];
+    for (let i = 0; i < def.keys.length; i++)
     {
         if (value & def.values[i])
         {
@@ -145,10 +145,10 @@ function refreshBitmaskResult(value, defName, output)
 
 function createNewBitmaskValueDialog()
 {
-    var ele = $(`<div title="Bitmask Value"></div>`);
-    var input = $(`<input />`).css("width", "60px");
-    var dropdown = $(`<select />`);
-    var output = $(`<p />`);
+    let ele = $(`<div title="Bitmask Value"></div>`);
+    let input = $(`<input />`).css("width", "60px");
+    let dropdown = $(`<select />`);
+    let output = $(`<p />`);
     dropdown.on("change", function(e){
         refreshBitmaskResult(parseInt(input.val()), dropdown.val(), output);
     });
@@ -170,15 +170,16 @@ function createNewBitmaskValueDialog()
 
 function createNewPathNormalizerDialog()
 {
-	var ele = $("<div title='Normalizer'><b>Enter the path:</b></div>");
-    var input = $(`<input placeholder="C:\\tempfiles/abc/def\\html"/>`).css("width", "100%");
-    var note = $(`<input placeholder="Any note"/>`).css("width", "100%");
-    var output = $("<p>The Result:</p>");
+	let ele = $("<div title='Normalizer'><b>Enter the path:</b></div>");
+    let input = $(`<input placeholder="C:\\tempfiles/abc/def\\html"/>`).css("width", "100%");
+    let note = $(`<input placeholder="Any note"/>`).css("width", "100%");
+    let output = $("<p>The Result:</p>");
     input.on("keyup", function(e){
         if (e.which == 13)
         {
-            var result = input.val();
-            output.html(`<p>The Result: <br>Win: ${result.replace(/(\/+|\\+)/g, "\\")} <br>Win2: ${result.replace(/(\/+|\\+)/g, "\\\\")} <br>Linux: ${result.replace(/(\/+|\\+)/g, "/")}</p>`);
+            let result = input.val();
+			let spReg = /[\/|\\]+/g
+            output.html(`<p>The Result: <br>Win: ${result.replace(spReg, "\\")} <br>Win2: ${result.replace(spReg, "\\\\")} <br>Linux: ${result.replace(spReg, "/")}</p>`);
         }
     });
     ele.append([input, note, output]);
