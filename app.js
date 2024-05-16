@@ -48,7 +48,7 @@ function initButtons()
         createNewBitmaskValueDialog();
     });
 	
-	$("#addNewPathNormalizerBtn").button().on("click", function(event){
+	$("#addPathNormalizerBtn").button().on("click", function(event){
 		createNewPathNormalizerDialog();
 	});
 }
